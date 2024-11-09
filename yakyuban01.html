@@ -31,10 +31,10 @@
 	h12
 	{
 		position: absolute;
-		top: 300px;
-		left: 550px;
+		top: 190px;
+	        left: 900px;
 		color: blue;
-		font-size: 120px;
+		font-size: 80px;
 		font-weight: 400;
 		font-family: "ＭＳ ゴシック";
 		//background: blue;
@@ -78,28 +78,28 @@
 
 <label for="text"> A</label>
 <input type="text" id="name" name="name" required>
-<input type="number" value=0 id="num1">
-<input type="number" value=0 id="num2">
-<input type="number" value=0 id="num3">
-<input type="number" value=0 id="num4">
-<input type="number" value=0 id="num5">
-<input type="number" value=0 id="num6">
-<input type="number" value=0 id="num7">
-<input type="number" value=0 id="num8">
-<input type="number" value=0 id="num9">
+<input type="number" value=00  id="num1">
+<input type="number" value=00  id="num2">
+<input type="number" value=00  id="num3">
+<input type="number" value=00  id="num4">
+<input type="number" value=00  id="num5">
+<input type="number" value=00  id="num6">
+<input type="number" value=00  id="num7">
+<input type="number" value=00  id="num8">
+<input type="number" value=00  id="num9">
 <span class="result1">R</span><BR>
 
 <label for="text"> B</label>
 <input type="text" id="name" name="name" required>
-<input type="number" value=0 id="num10">
-<input type="number" value=0 id="num11">
-<input type="number" value=0 id="num12">
-<input type="number" value=0 id="num13">
-<input type="number" value=0 id="num14">
-<input type="number" value=0 id="num15">
-<input type="number" value=0 id="num16">
-<input type="number" value=0 id="num17">
-<input type="number" value=0 id="num18">
+<input type="number" value=00  id="num10">
+<input type="number" value=00  id="num11">
+<input type="number" value=00  id="num12">
+<input type="number" value=00  id="num13">
+<input type="number" value=00  id="num14">
+<input type="number" value=00  id="num15">
+<input type="number" value=00  id="num16">
+<input type="number" value=00  id="num17">
+<input type="number" value=00  id="num18">
 <span class="result2">R</span>
 <button class="button" type="button" onclick="onClick();">スコア</button><br>
 
@@ -146,6 +146,137 @@
    }
 
 </style>
+
+    <style>
+        .container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 50%;
+            height: 50%;
+            background-color: lightgreen;
+            padding: 10px;
+            box-sizing: border-box;
+            border-top-left-radius: 10px;
+            box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2);
+            transform: scale(1.1); /* 縮小率を再調整 */
+            transform-origin: bottom right; /* 右下を基準に縮小 */
+        }
+        .title {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .counter {
+            font-size: 16px; /* 全体を縮小するためにフォントサイズを小さく調整 */
+            margin: 5px 0;
+        }
+        .button {
+            padding: 5px;
+            margin: 3px;
+            font-size: 12px;
+        }
+        .base {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 30px;
+            margin: 3px;
+            font-size: 12px;
+        }
+        .occupied {
+            background-color: #ffdd57;
+        }
+    </style>
+    <div class="container">
+        <h1 class="title">ゲームカウント</h1>
+        
+        <div id="count-display">
+            <div class="counter">ボール: <span id="balls">0</span></div>
+            <div class="counter">ストライク: <span id="strikes">0</span></div>
+            <div class="counter">アウト: <span id="outs">0</span></div>
+        </div>
+
+        <button class="button" onclick="incrementBall()">ボール +</button>
+        <button class="button" onclick="incrementStrike()">ストライク +</button>
+        <button class="button" onclick="incrementOut()">アウト +</button>
+        <button class="button" onclick="resetCounts()">カウントリセット</button>
+
+        <h2 class="title">ランナー状況</h2>
+        <div id="bases">
+            <div id="firstBase" class="base">1塁</div>
+            <div id="secondBase" class="base">2塁</div>
+            <div id="thirdBase" class="base">3塁</div>
+        </div>
+        <button class="button" onclick="toggleRunner('firstBase')">1塁 ランナー切替</button>
+        <button class="button" onclick="toggleRunner('secondBase')">2塁 ランナー切替</button>
+        <button class="button" onclick="toggleRunner('thirdBase')">3塁 ランナー切替</button>
+        <button class="button" onclick="resetRunners()">ランナーリセット</button>
+    </div>
+
+    <script>
+        let balls = 0;
+        let strikes = 0;
+        let outs = 0;
+
+        function updateDisplay() {
+            document.getElementById('balls').textContent = balls;
+            document.getElementById('strikes').textContent = strikes;
+            document.getElementById('outs').textContent = outs;
+        }
+
+        function incrementBall() {
+            if (balls < 3) {
+                balls++;
+            } else {
+                balls = 0;
+                strikes = 0;
+                alert("フォアボール！");
+            }
+            updateDisplay();
+        }
+
+        function incrementStrike() {
+            if (strikes < 2) {
+                strikes++;
+            } else {
+                strikes = 0;
+                balls = 0;
+                incrementOut();
+            }
+            updateDisplay();
+        }
+
+        function incrementOut() {
+            if (outs < 2) {
+                outs++;
+            } else {
+                outs = 0;
+                resetCounts();
+                alert("3アウトチェンジ");
+            }
+            updateDisplay();
+        }
+
+        function resetCounts() {
+            balls = 0;
+            strikes = 0;
+            outs = 0;
+            updateDisplay();
+        }
+
+        function toggleRunner(baseId) {
+            const baseElement = document.getElementById(baseId);
+            baseElement.classList.toggle('occupied');
+        }
+
+        function resetRunners() {
+            document.getElementById('firstBase').classList.remove('occupied');
+            document.getElementById('secondBase').classList.remove('occupied');
+            document.getElementById('thirdBase').classList.remove('occupied');
+        }
+    </script>
 </body>
 </html>
 <script>
